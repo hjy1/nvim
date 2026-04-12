@@ -12,6 +12,14 @@ return {
 		"hrsh7th/nvim-cmp",
 	},
 	config = function()
-		require("codeium").setup({})
+		require("codeium").setup({
+			filetypes = {
+				markdown = false,
+				text = false,
+				txt = false,
+				gitcommit = false,
+				help = false,
+			},
+		})
 	end,
 }

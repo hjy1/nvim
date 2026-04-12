@@ -1,12 +1,18 @@
 local M = {}
 
 M.on_attach = function(event)
-	local client = vim.lsp.get_client_by_id(event.data.client_id)
-	if not client then
+	if not event.data then
+		return
+	end
+
+	local ok, client = pcall(vim.lsp.get_client_by_id, event.data.client_id)
+
+	if not ok or not client then
 		return
 	end
 	local bufnr = event.buf
 	local keymap = vim.keymap.set
+
 	local opts = {
 		noremap = true, -- prevent recursive mapping
 		silent = true, -- don't print the command to the cli
