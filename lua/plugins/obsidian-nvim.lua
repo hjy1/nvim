@@ -1,36 +1,30 @@
 return {
-	"https://github.com/obsidian-nvim/obsidian.nvim",
-	lazy = false,
-	config = function()
-    local uv = vim.loop
+  "obsidian-nvim/obsidian.nvim",
+  lazy = false,
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  opts = {
+    legacy_commands = false,
 
-    local function is_arch()
-      local f = io.open("/etc/os-release", "r")
-      if not f then return false end
-      local content = f:read("*a")
-      f:close()
-      return content:lower():find("arch") ~= nil or content:lower():find("artix") ~= nil
-    end
-
-    local workspace_path
-
-    if is_arch() then
-      workspace_path = vim.fn.expand("~/Documents/Notes")
-    else
-      workspace_path = "/run/media/veracrypt64/Notes/"
-    end
-
-    require("obsidian").setup({
-      legacy_commands = false,
-      workspaces = {
-        { name = "Notes", path = workspace_path },
+    workspaces = {
+      {
+        name = "obs",
+        path = vim.fn.expand("~/Documents/obs"),
       },
-      picker = { name = "fzf-lua" },
-    })
+    },
 
-		vim.keymap.set("n", "<leader>nn", "<cmd>Obsidian new<cr>", { desc = "New Note" })
-		vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian quick_switch<cr>", { desc = "Find note" })
-		vim.keymap.set("n", "<leader>ns", "<cmd>Obsidian search<cr>", { desc = "Search notes" })
-		vim.keymap.set("n", "<leader>nt", "<cmd>Obsidian today<cr>", { desc = "Today's daily note" })
-	end,
+    picker = {
+      name = "fzf-lua",
+    },
+  },
+
+  config = function(_, opts)
+    require("obsidian").setup(opts)
+
+    vim.keymap.set("n", "<leader>nn", "<cmd>Obsidian new<cr>", { desc = "New note" })
+    vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian quick_switch<cr>", { desc = "Find note" })
+    vim.keymap.set("n", "<leader>ns", "<cmd>Obsidian search<cr>", { desc = "Search notes" })
+    vim.keymap.set("n", "<leader>nt", "<cmd>Obsidian today<cr>", { desc = "Today's daily note" })
+  end,
 }
